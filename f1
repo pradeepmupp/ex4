@@ -1,1 +1,55 @@
 hello world
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+deploy_helloworld.yml
+---
+- hosts: dockerhost
+  tasks:
+  - name: create container
+    command: docker run -d --name hello_world_server -p 8084:8080 pradeepmupp/hello_world
+
+helloworld.yml
+---
+- hosts: ansiblehost
+  tasks:
+  - name: create docker image
+    command: docker build -t hello_world:latest .
+    args:
+     chdir: /opt/docker
+  - name: create tag to push image onto dockerHub
+    command: docker tag hello_world:latest pradeepmupp/hello_world:latest
+  - name: Push docker image
+    command: docker push pradeepmupp/hello_world:latest
